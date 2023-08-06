@@ -1,0 +1,20 @@
+[
+    {
+        "id": 1,
+        "title": "Fetch API",
+        "description": "The Fetch API is built into modern browsers and allows you to make network requests. It returns a Promise that resolves to the Response object.",
+        "code": "import React, { useState, useEffect } from 'react';\n\nconst FetchAPI = () => {\n    const [data, setData] = useState(null);\n    const [loading, setLoading] = useState(true);\n    const [error, setError] = useState(null);\n\n    useEffect(() => {\n        const fetchData = async () => {\n            try {\n                const response = await fetch(\n                    'https://jsonplaceholder.typicode.com/todos'\n                );\n                if (!response.ok) {\n                    throw new Error('Network response was not ok.');\n                }\n                const data = await response.json();\n                setData(data);\n                setLoading(false);\n            } catch (error) {\n                setError(error.message);\n                setLoading(false);\n            }\n        };\n\n        fetchData();\n    }, []);\n\n    if (loading) {\n        return <div>Loading...</div>;\n    }\n\n    if (error) {\n        return <div>Error: {error}</div>;\n    }\n\n    return (\n        <div>\n            <h1>Data Fetching with Fetch API</h1>\n            <ol className='list-group list-group-numbered'>\n                {data.slice(0, 15).map((item) => (\n                    <li className='list-group-item' key={item.id}>\n                        {item.title}\n                    </li>\n                ))}\n            </ol>\n        </div>\n    );\n};\n\nexport default FetchAPI;"
+    },
+    {
+        "id": 2,
+        "title": "Axios",
+        "description": "Axios is a popular third-party library for making HTTP requests. It provides a simple and convenient API to handle data fetching.",
+        "code": "import React, { useState, useEffect } from 'react';\nimport axios from 'axios';\n\nconst FetchAxios = () => {\n    const [data, setData] = useState(null);\n    const [loading, setLoading] = useState(true);\n    const [error, setError] = useState(null);\n\n    useEffect(() => {\n        const fetchData = async () => {\n            try {\n                const response = await axios.get(\n                    'https://jsonplaceholder.typicode.com/todos'\n                );\n                setData(response.data);\n                setLoading(false);\n            } catch (error) {\n                setError(error.message);\n                setLoading(false);\n            }\n        };\n\n        fetchData();\n    }, []);\n\n    if (loading) {\n        return <div>Loading...</div>;\n    }\n\n    if (error) {\n        return <div>Error: {error}</div>;\n    }\n\n    return (\n        <div>\n            <h1>Data Fetching with Axios</h1>\n            <ol className='list-group list-group-numbered'>\n                {data.slice(0, 15).map((item) => (\n                    <li className='list-group-item' key={item.id}>\n                        {item.title}\n                    </li>\n                ))}\n            </ol>\n        </div>\n    );\n};\n\nexport default FetchAxios;"
+    },
+    {
+        "id": 3,
+        "title": "Async/Await with Fetch or Axios",
+        "description": "You can use async/await with Fetch or Axios to handle asynchronous data fetching in a more readable and synchronous-like manner.",
+        "code": ""
+    }
+]

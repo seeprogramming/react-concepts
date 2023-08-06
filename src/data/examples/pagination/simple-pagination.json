@@ -1,0 +1,20 @@
+[
+    {
+        "id": 1,
+        "title": "Simple Pagination",
+        "description": "This type of pagination involves displaying a fixed number of items per page and providing navigation controls to move between pages. Users can click on previous and next buttons to view different sets of data.",
+        "code": "\nimport React, { useState } from 'react';\n\nconst itemsPerPage = 5;\n\nconst SimplePagination = ({ data }) => {\n  const [currentPage, setCurrentPage] = useState(1);\n\n  const handleNextPage = () => {\n    setCurrentPage((prevPage) => prevPage + 1);\n  };\n\n  const handlePrevPage = () => {\n    setCurrentPage((prevPage) => prevPage - 1);\n  };\n\n  const startIndex = (currentPage - 1) * itemsPerPage;\n  const endIndex = startIndex + itemsPerPage;\n  const currentPageData = data.slice(startIndex, endIndex);\n\n  return (\n    <div>\n      {currentPageData.map((item) => (\n        <div key={item.id}>{item.name}</div>\n      ))}\n      <button disabled={currentPage === 1} onClick={handlePrevPage}>\n        Previous\n      </button>\n      <button disabled={endIndex >= data.length} onClick={handleNextPage}>\n        Next\n      </button>\n    </div>\n  );\n};\n"
+    },
+    {
+        "id": 2,
+        "title": "Infinite Scroll Pagination",
+        "description": "Infinite scroll typically requires additional logic to handle dynamic loading of more data when the user scrolls to the bottom.",
+        "code": "import React, { useState, useEffect } from 'react';\n\nconst InfiniteScrollPagination = ({ data }) => {\n  const [currentPage, setCurrentPage] = useState(1);\n  const [currentPageData, setCurrentPageData] = useState([]);\n\n  const divRef = React.useRef(null);\n\n  useEffect(() => {\n    // Function to load more data when the target div is scrolled to the bottom\n    const handleScroll = () => {\n      const { scrollTop, clientHeight, scrollHeight } = divRef.current;\n      if (scrollTop + clientHeight >= scrollHeight) {\n        setCurrentPage((prevPage) => prevPage + 1);\n      }\n    };\n\n    // Add the scroll event listener to the target div\n    divRef.current.addEventListener('scroll', handleScroll);\n\n    // Cleanup function to remove the event listener when the component is unmounted\n    return () => {\n      divRef.current.removeEventListener('scroll', handleScroll);\n    };\n  }, []);\n\n  useEffect(() => {\n    // Load more data when the currentPage changes\n    const itemsPerPage = 5;\n    const startIndex = (currentPage - 1) * itemsPerPage;\n    const endIndex = startIndex + itemsPerPage;\n    setCurrentPageData((prevData) => [...prevData, ...data.slice(startIndex, endIndex)]);\n  }, [currentPage, data]);\n\n  return (\n    <div ref={divRef} style={{ overflowY: 'scroll', height: '300px', border: '1px solid #ccc' }}>\n      {currentPageData.map((item) => (\n        <div key={item.id}>{item.name}</div>\n      ))}\n    </div>\n  );\n};\n\nexport default InfiniteScrollPagination;"
+    },
+    {
+        "id": 3,
+        "title": "Load More Button Pagination",
+        "description": "",
+        "code": "import React, { useState } from 'react';\n\nconst itemsPerPage = 5;\n\nconst LoadMorePagination = ({ data }) => {\n  const [currentPage, setCurrentPage] = useState(1);\n\n  const handleLoadMore = () => {\n    setCurrentPage((prevPage) => prevPage + 1);\n  };\n\n  const startIndex = (currentPage - 1) * itemsPerPage;\n  const endIndex = startIndex + itemsPerPage;\n  const currentPageData = data.slice(0, endIndex);\n\n  return (\n    <div>\n      {currentPageData.map((item) => (\n        <div key={item.id}>{item.name}</div>\n      ))}\n      <button disabled={endIndex >= data.length} onClick={handleLoadMore}>\n        Load More\n      </button>\n    </div>\n  );\n};\n\nexport default LoadMorePagination;"
+    }
+]
